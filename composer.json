@@ -1,0 +1,17 @@
+{
+    "name": "luizc/php-na-web",
+    "autoload": {
+        "psr-4": {
+            "Luizc\\PhpNaWeb\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "luizcrisantoo",
+            "email": "luiz.crisanto@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
