@@ -25,7 +25,7 @@ $videoList = $pdo->query('SELECT * FROM videos;')->fetchAll(\PDO::FETCH_ASSOC);
     <header>
 
         <nav class="cabecalho">
-            <a class="logo" href="./index.html"></a>
+            <a class="logo" href="./index.php"></a>
 
             <div class="cabecalho__icones">
                 <a href="./pages/enviar-video.html" class="cabecalho__videos"></a>
