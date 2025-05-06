@@ -1,62 +1,36 @@
 <?php
 
-$dbPath = __DIR__ . '/banco.sqlite';
+declare(strict_types=1);
+
+use Alura\Mvc\Controller\{
+    Controller,
+    DeleteVideoController,
+    EditVideoController,
+    Error404Controller,
+    NewVideoController,
+    VideoFormController,
+    VideoListController
+};
+use Alura\Mvc\Repository\VideoRepository;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$dbPath = __DIR__ . '/../banco.sqlite';
 $pdo = new PDO("sqlite:$dbPath");
-$videoList = $pdo->query('SELECT * FROM videos;')->fetchAll(\PDO::FETCH_ASSOC);
+$videoRepository = new VideoRepository($pdo);
 
+$routes = require_once __DIR__ . '/../config/routes.php';
 
-?><!DOCTYPE html>
-<html lang="pt-br">
+$pathInfo = $_SERVER['PATH_INFO'] ?? '/';
+$httpMethod = $_SERVER['REQUEST_METHOD'];
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="./css/estilos.css">
-    <link rel="stylesheet" href="./css/flexbox.css">
-    <title>AluraPlay</title>
-    <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
-</head>
+$key = "$httpMethod|$pathInfo";
+if (array_key_exists($key, $routes)) {
+    $controllerClass = $routes["$httpMethod|$pathInfo"];
 
-<body>
-
-    <header>
-
-        <nav class="cabecalho">
-            <a class="logo" href="./index.php"></a>
-
-            <div class="cabecalho__icones">
-                <a href="./pages/enviar-video.html" class="cabecalho__videos"></a>
-                <a href="./pages/login.html" class="cabecalho__sair">Sair</a>
-            </div>
-        </nav>
-
-    </header>
-
-    <ul class="videos__container">
-        <?php foreach ($videoList as $video): ?>
-        <?php
-          if (!str_starts_with($video['url'], 'http')) {
-            $video['url'] = 'https://www.youtube.com/embed/CujS0VGF8oA';
-            }
-            ?>
-            <li class="videos__item">
-                <iframe width="100%" height="72%" src="<?= $video['url']; ?>"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-                <div class="descricao-video">
-                    <h3><?= $video['title']; ?></h3>
-                    <div class="acoes-video">
-                        <a href="./pages/enviar-video.html">Editar</a>
-                        <a href="/remover-video.php?id=<?= $video['id']; ?>">Excluir</a>
-                    </div>
-                </div>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-    </body>
-
-</html>
+    $controller = new $controllerClass($videoRepository);
+} else {
+    $controller = new Error404Controller();
+}
+/** @var Controller $controller */
+$controller->processaRequisicao();
