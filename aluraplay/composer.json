@@ -1,17 +1,17 @@
 {
-    "name": "luizc/aluraplay",
-    "autoload": {
-        "psr-4": {
-            "Luizc\\Aluraplay\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "luizcrisantoo",
-            "email": "luiz.crisanto@gmail.com"
-        }
-    ],
-    "require": {
-        "vlucas/phpdotenv": "^5.6"
+  "name": "luiz/aluraplay",
+  "autoload": {
+    "psr-4": {
+      "Alura\\Mvc\\": "aluraplay/src/"
     }
+  },
+  "authors": [
+    {
+      "name": "luizcrisantoo",
+      "email": "luiz.crisanto@gmail.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
+  }
 }
